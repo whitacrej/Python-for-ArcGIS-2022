@@ -28,21 +28,23 @@ import csv
 
 ''' Parameters '''
 # Input Table (Table View)
-input_table = arcpy.GetParameterAsText(0) 
+input_table = arcpy.GetParameterAsText(0)
 
 # Output Fields (Field; MultiValue: Yes; Filter: field [NOT Shape, Blob, Raster, XML])
-field_names = arcpy.GetParameterAsText(1) 
+field_names = arcpy.GetParameterAsText(1).split(';')
 
 # Output CSV Table (File; Direction: Output; Filter: File [csv, txt])
 output_csv = arcpy.GetParameterAsText(2)
 
+# Add a message to test the parameter input
+arcpy.AddMessage(field_names) #  output_csv
 
 ''' Script '''
 
 # Read the feature class or standalone table data
 
 # Set the progressor, first count the number of records
-rows = int(arcpy.GetCount_management(table)[0])
+rows = int(arcpy.GetCount_management(input_table)[0])
 arcpy.SetProgressor('step', '{0} rows in dataset...'.format(rows), 0, rows, 1)
 
 # Create an empty list to append data to

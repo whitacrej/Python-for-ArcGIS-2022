@@ -23,7 +23,7 @@ class ToolValidator(object):
                 # Create a describe object for 'Input Table'
                 desc = arcpy.Describe(self.params[0].value)
 
-                # Check if 'Input Table' contains aliases, and if so enable Add Field Aliaases to CSV Table (optional)' parameter
+                # Check if 'Input Table' contains aliases, and if so enable Add Field Aliases to CSV Table (optional)' parameter
                 aliases = [field.aliasName for field in desc.fields if field.aliasName != field.name]
                 if aliases:
                     self.params[3].enabled = True

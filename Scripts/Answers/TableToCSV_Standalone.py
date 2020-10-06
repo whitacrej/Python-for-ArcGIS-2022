@@ -2,11 +2,11 @@
 
 ''' Metadata, Copyright, License:
 ------------------------------------------------------------------------
-Name:       TableToCSV.py
+Name:       TableToCSV_Standalone.py
 Purpose:    This script converts a table to a CSV table with selected
             fields.
 Author:     Whitacre, James
-Created:    2019/10/16
+Created:    2020/10/06
 Copyright:  Copyright <Your Organization/Name> <YYYY>
 Licence:    Licensed under the Apache License, Version 2.0 (the
             "License"); you may not use this file except in compliance
@@ -36,8 +36,7 @@ field_names = ['Shape', 'PERMIT_NO', 'FARM_NAME', 'COUNTY', 'PROD_GAS_QUANT']
 
 # Create a new output CSV file
 # Replace the '...' with the location where you placed your downloaded data
-# output_csv = r'C:\...\Advanced_PythonForArcGIS\ExerciseData\CSV\UnconventionalWells.csv'
-output_csv = r'C:\Users\whitacrej\Documents\GitHub\Python-For-ArcGIS-2019\Advanced_PythonForArcGIS\ExerciseData\CSV\UnconventionalWells.csv'
+output_csv = r'C:\...\Python-for-ArcGIS-ILGISA-2020\CSV\UnconventionalWells.csv'
 
 
 ''' Script '''

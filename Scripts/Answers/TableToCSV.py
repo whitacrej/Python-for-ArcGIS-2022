@@ -2,7 +2,7 @@
 
 ''' Metadata, Copyright, License:
 ------------------------------------------------------------------------
-Name:       TableToCSV_Standalone_ListComprehension.py
+Name:       TableToCSV.py
 Purpose:    This script converts a table to a CSV table with selected
             fields.
 Author:     Whitacre, James
@@ -27,27 +27,41 @@ import csv
 
 
 ''' Parameters '''
+# Input Table (Table View)
+input_table = arcpy.GetParameterAsText(0) 
 
-# Input feature class or standalone table
-input_table = arcpy.management.MakeFeatureLayer('https://services2.arcgis.com/eQgAMgHr2CRobt2r/arcgis/rest/services/UnconventionalWellsPA/FeatureServer/0', 'Unconventional Wells')
+# Output Fields (Field; MultiValue: Yes; Filter: field [NOT Shape, Blob, Raster, XML])
+field_names = arcpy.GetParameterAsText(1) 
 
-# Create user-defined list of the feature class or standalone table field names to be exported
-field_names = ['Shape', 'PERMIT_NO', 'FARM_NAME', 'COUNTY', 'PROD_GAS_QUANT']
-
-# Create a new output CSV file
-# Replace the '...' with the location where you placed your downloaded data
-# output_csv = r'C:\...\Advanced_PythonForArcGIS\ExerciseData\CSV\UnconventionalWells.csv'
-output_csv = r'C:\Users\whitacrej\Documents\GitHub\Python-For-ArcGIS-2019\Advanced_PythonForArcGIS\ExerciseData\CSV\UnconventionalWells.csv'
+# Output CSV Table (File; Direction: Output; Filter: File [csv, txt])
+output_csv = arcpy.GetParameterAsText(2)
 
 
 ''' Script '''
 
 # Read the feature class or standalone table data
 
-# Create a list of the data
-data = [row for row in arcpy.da.SearchCursor(input_table, field_names)]
+# Set the progressor, first count the number of records
+rows = int(arcpy.GetCount_management(table)[0])
+arcpy.SetProgressor('step', '{0} rows in dataset...'.format(rows), 0, rows, 1)
+
+# Create an empty list to append data to
+data = []
+
+# Create a search cursor to access the data
+with arcpy.da.SearchCursor(input_table, field_names) as cursor:
+    for row in cursor:
+        # Append each row to the data list
+        data.append(row)
+        # Update the progressor position
+        arcpy.SetProgressorPosition()
+
 
 # Open the new output CSV file
+
+# Reset and create new progressor to show that CSV file is being created
+arcpy.ResetProgressor()
+arcpy.SetProgressor('default', 'Creating CSV file...')
 
 # Python 2.x...For some reason, 'w' adds an extra line between rows, use 'wb' instead...
 # with open(output_csv, 'wb') as csv_file:
@@ -64,4 +78,4 @@ with open(output_csv, 'w', newline='') as csv_file:
     csv_writer.writerows(data)
 
 # Message that the script is finished
-print("CSV file complete; located at {}".format(output_csv))
+arcpy.AddMessage('CSV file complete: {0} rows and {1} fields exported.'.format(rows, len(field_names)))
